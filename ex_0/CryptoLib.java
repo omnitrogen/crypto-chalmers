@@ -3,23 +3,10 @@
 // Running:
 //   java CryptoLibTest
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class CryptoLib {
 
 	public static void main(String[] args) {
-		int[] eea_res = EEA(1, 2);
-
-		List<Integer> res = Arrays.stream(eea_res).boxed().collect(Collectors.toList());		
-		System.out.println(res);
-
-		System.out.println(Gcd(9, 2));
-
-		System.out.println(EulerPhi(9));
+		System.out.println(ModularExponantiation(3, 109, 6));
 	}
 
 	/**
@@ -28,24 +15,14 @@ public class CryptoLib {
 	 * common divisor of "a" and "b", and "gcd = a * s + b * t".
 	 **/
 	public static int[] EEA(int a, int b) {
-		// Note: as you can see in the test suite,
-		// your function should work for any (positive) value of a and b.
-		int gcd = -1;
-		int s = -1;
-		int t = -1;
-		int[] result = new int[3];
-		result[0] = gcd;
-		result[1] = s;
-		result[2] = t;
-		return result;
-	}
-
-	/**
-	 * Returns the Greatest Common Divisor between given a and b.
-	 **/
-	public static int Gcd(int a, int b) {
-		if (b == 0) return a;
-		else return Gcd(b, a % b);
+		int s1 = 0, s2 = 1, r1 = b, r2 = a, q, r_tmp, s_tmp;
+		if (a == b) return new int[]{a, 1, 0};
+		while (r1 > 0) {
+			q =  r2 / r1;
+			r_tmp = r2; r2 = r1; r1 = r_tmp - q * r1;
+			s_tmp = s2; s2 = s1; s1 = s_tmp - q * s1;
+		}
+		return new int[]{r2, s2, (r2 - a * s2) / b};
 	}
 
 	/**
@@ -53,7 +30,7 @@ public class CryptoLib {
 	 **/
 	public static int EulerPhi(int n) {
 		int total = 0;
-		for (int i = 0; i < n; i ++) if (Gcd(i, n) == 1) total ++;
+		for (int i = 0; i < n; i ++) if (EEA(i, n)[0] == 1) total ++;
 		return total;
 	}
 
@@ -62,7 +39,22 @@ public class CryptoLib {
 	 * modular inverse does not exist.
 	 **/
 	public static int ModInv(int n, int m) {
-		return -1;
+		while (n<0) n += m;
+		int[] eea = EEA(n,m);
+		if (eea[0] == 1) return eea[1] > 0 ? eea[1] : m + eea[1];
+		return 0;
+	}
+
+	/**
+	 * Returns the a^b (mod m) for big number
+	 **/
+	public static int ModularExponantiation(int a, int b, int m) {
+		int res = 1;
+		for (int i = 0; i < b; i++) {
+			res *= a;
+			res %= m;
+		}
+		return res;
 	}
 
 	/**
@@ -70,7 +62,9 @@ public class CryptoLib {
 	 * Fermat Witness. Tests values from 2 (inclusive) to "n/3" (exclusive).
 	 **/
 	public static int FermatPT(int n) {
-		return -1;
+		for (int i = 2; i < n / 3; i ++)
+			if (ModularExponantiation(i, n-1, n) != 1) return i;
+		return 0;
 	}
 
 	/**
@@ -80,7 +74,9 @@ public class CryptoLib {
 	 * different output values the hash function can produce.
 	 **/
 	public static double HashCP(double n_samples, double size) {
-		return -1;
+		double prob = 1;
+		for (double i = size - (n_samples - 1); i <= (size - 1); i ++) prob *= (i / size);
+		return 1 - prob;
 	}
 
 }
