@@ -5,10 +5,6 @@
 
 public class CryptoLib {
 
-	public static void main(String[] args) {
-		System.out.println(ModularExponantiation(3, 109, 6));
-	}
-
 	/**
 	 * Returns an array "result" with the values "result[0] = gcd",
 	 * "result[1] = s" and "result[2] = t" such that "gcd" is the greatest

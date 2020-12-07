@@ -8,7 +8,7 @@
 
 `make test`
 
-- (clean compiled java class) :recycle:
+- (clean compiled java classes) :recycle:
 
 `make clean`
 
