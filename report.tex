@@ -12,6 +12,7 @@
 \usepackage{caption}
 \usepackage{amssymb}
 \usepackage{listings}
+\usepackage{ragged2e}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -45,6 +46,37 @@ All the programs are written in Java, and we provide Makefile(s) in order to run
 
 \newpage
 \section{Attacking RSA}
+
+The same message has been encrypted using RSA to three different recipients. All recipients have the same public key ($e=3$) but different modulus ($N_1$, $N_2$, $N_3$). We have intercepted the three ciphertexts. The goal is to find the initial message.
+
+Knowing how the RSA protocol works, we have the following encryptions :
+
+$$
+\left\{
+    \begin{array}{lll}
+        c_1 \equiv m^{e} (\textrm{mod}\ N_1)\\
+        c_2 \equiv m^{e} (\textrm{mod}\ N_2)\\
+        c_3 \equiv m^{e} (\textrm{mod}\ N_3)
+    \end{array}
+\right.
+$$
+
+With the Chinese Remainder Theoremn we can find $c$ such that the solutions to the system above are all number congruent to $c$ modulo $N_1 N_2 N_3$.
+
+Having found c, we know that : 
+
+\vspace{-2em}
+\begin{alignat*}{2}
+    &c \equiv m^{e} (\textrm{mod}\ N_1 N_2 N_3)&\iff&m \equiv \sqrt[3]{c\ (\textrm{mod}\ N_1 N_2 N_3)}\\
+\end{alignat*}
+
+\vspace{-2em}
+The last step is then to compute m with the helper function provided in the \verb+CubeRoot.java+ file.
+
+\textbf{\large
+\begin{center}
+    Decoded text: Taher ElGamal
+\end{center}}
 
 \newpage
 \section{Attacking ElGamal}
