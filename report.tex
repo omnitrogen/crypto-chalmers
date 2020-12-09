@@ -26,11 +26,19 @@
 \newcommand*\xor{\oplus}
 
 \rhead{Félix Defrance - Alexis Laude}
-\lhead{Cryptography Course (TDA352)}
+\lhead{Cryptography Course 2020 (TDA352)}
 
 \begin{document}
 
-\section* {\underline{Programming Assignement Report}}
+\begin{titlepage}
+   \vspace*{\stretch{1.0}}
+   \begin{center}
+      \Large{Cryptography Course 2020 (TDA352)\\ \textbf{Programming Assignement Report}}\\
+      \vspace*{\stretch{.5}}
+      \large{Félix Defrance - Alexis Laude}
+   \end{center}
+   \vspace*{\stretch{2.0}}
+\end{titlepage}
 
 \section*{Prelude}
 
@@ -38,7 +46,67 @@ The personnummer used to generate our assignment is : \textbf{{\large 1998090772
 
 All the programs are written in Java, and we provide Makefile(s) in order to run the code. Read all the README(s) for each exercices to get additionnal information on how to use the Makefile, but it should be pretty straightforward.
 
+\newpage
 \section{A Math Library for Cryptography}
+
+\subsection{Extended Euclidean Algorithm}
+
+The implementation follows \verb+ALGORITHM B.10+ from the \textbf{INTRODUCTION TO MODERN CRYPTOGRAPHY} textbook.
+
+\subsection{Euler's Phi Function (Totient)}
+
+Straightforward implementation from the Wikipedia definition : \textit{Euler's totient function counts the positive integers up to a given integer n that are relatively prime to n}.
+
+\subsection{Modular Inverse}
+
+Our function has to \textit{"return the value "v" such that "n*v = 1 (mod m)""}, given $n$ and $m$.
+
+First, if $n$ is negative, we add the modulo $m$ until it gets positive.
+
+We then run the Extended Euclidean Algorithm defined above with $n$ and $m$.
+
+If the modular inverse exists ($gcd(n, m) = 1$), we check if $v$ is positive, and we return $v$ if it is and $v+m$ if it is negative so that it gets positive.
+
+If there are no modular inverse, we return 0.
+
+\subsection{Fermat Primality test}
+
+We first defined a helper function \verb+ModularExponantiation+ that takes $a$, $b$ and $m$ and returns $a^b\ (\textrm{mod}\ m)$.
+
+Then, to check if a given $n$ is a Fermat Prime, we iterate over $i$ from $2$ to $\dfrac{n}{3}$, and check at each iteration if $i^{n-1} \not\equiv 1 (\textrm{mod}\ m)$.
+
+If $i$ verify this property, we return $i$, which is the lowest Fermat Witness.
+
+If no $i$ is a Fermat Witness, we return $0$.
+
+\subsection{Hash Collision Probability}
+
+The probability P that calling a perfect hash function with "n\_samples" (uniformly distributed) will give one collision, where "size" is the number of different output values the hash function can produce, is :
+
+\vspace{-2em}
+\begin{alignat*}{2}
+    P & = 1 - {\frac {size!}{size^{n\_samples}(size-n\_samples)!}} \\
+    & = 1 - {\frac{1}{size^{n\_samples}}}\cdot{\frac {size!}{(size-n\_samples)!}}
+\end{alignat*}
+\vspace{-1em}
+
+${\frac {size!}{(size-n\_samples)!}}$ is the number of permutation of $n\_samples$ of $size$. We can write permutations this way :
+
+$$
+    Perm(n,k) = {\frac {n!}{(n-k)!}} = \underbrace {n\cdot (n-1)\cdot (n-2)\cdots (n-k+1)} _{k\ \mathrm {factors} }
+$$
+
+If we rewrite P :
+
+\vspace{-2em}
+\begin{alignat*}{2}
+    P & = 1 - {\frac{1}{size^{n\_samples}}}\cdot{\frac {size!}{(size-n\_samples)!}}\\
+    & = 1 - \underbrace {\frac{1}{size \cdot size \cdots size}} _{n\_samples\ \mathrm {factors} }\cdot \underbrace {size\cdot (size-1)\cdot (size-2)\cdots (size-n\_samples+1)} _{n\_samples\ \mathrm {factors} }\\
+    & = 1 -     \prod_{i=size - n\_samples + 1}^{size} \frac{i}{size}
+\end{alignat*}
+\vspace{-1em}
+
+That's the formula we implemented with a for loop.
 
 \newpage
 \section{Special Soundness of Fiat-Shamir sigma-protocol}

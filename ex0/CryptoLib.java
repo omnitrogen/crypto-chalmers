@@ -71,7 +71,7 @@ public class CryptoLib {
 	 **/
 	public static double HashCP(double n_samples, double size) {
 		double prob = 1;
-		for (double i = size - (n_samples - 1); i <= (size - 1); i ++) prob *= (i / size);
+		for (double i = size - n_samples + 1; i <= size; i ++) prob *= (i / size);
 		return 1 - prob;
 	}
 
