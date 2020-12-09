@@ -43,6 +43,32 @@ All the programs are written in Java, and we provide Makefile(s) in order to run
 \newpage
 \section{Special Soundness of Fiat-Shamir sigma-protocol}
 
+We eavesdropped on a number of Fiat-Shamir protocol runs and we found that the same nonce was used twice! The goal is to retrieve the secret key used in the protocol.
+
+The same nonce $r$ has been used twice for different challenge values : $c = 0$ and $c = 1$.
+
+We know that during the Fiat-Shamir protocol, when the Verifier sends a challenge $c \in \{0, 1\}$, the Prover needs to send her back the value $s = r x^c (\textrm{mod}\ n)$, where $x$ is the secret key.
+
+For the first challenge $c = 0$, he Prover will sends back the value $s = r x^0 = r$.
+
+Thus, we know the value of $r$, it is $s$.
+
+For the second challenge $c = 1$, he Prover will sends back the value $s = r x^1 = r x$.
+
+We know the value of $s$ and $r$, we can then find the value $x = s r^{-1} (\textrm{mod}\ n)$.
+
+\vspace{2em}
+
+In order to solve the problem, we can iterate two-by-two over all runs, and compute for each iteration the value $s_{1} s_{2}^{-1} (\textrm{mod}\ n)$.
+
+At each run, we can check wether $X = x^2 (\textrm{mod}\ n)$ stands, and if it does, we return $x (\textrm{mod}\ n)$.
+
+\textbf{\large
+\begin{center}
+    Decoded text: Think left and think right and think low and think high. Oh, the thinks you can think up if only you try!\\
+    ------------------------- Dr. Seuss
+\end{center}}
+
 \newpage
 \section{Decrypting CBC with simple XOR}
 
