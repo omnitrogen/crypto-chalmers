@@ -23,6 +23,8 @@
 
 \setcounter{section}{-1}
 
+\newcommand*\xor{\oplus}
+
 \rhead{Félix Defrance - Alexis Laude}
 \lhead{Cryptography Course (TDA352)}
 
@@ -43,6 +45,46 @@ All the programs are written in Java, and we provide Makefile(s) in order to run
 
 \newpage
 \section{Decrypting CBC with simple XOR}
+
+We have intercepted a message that was encrypted using cypher-block chaining, and we also know the plain-text value of the first block.
+
+We know that Cipher Block Chaining ciphers this way :
+
+$$
+    C_i = K \xor (M_i \xor C_{i-1})\ ;\ \textrm{where}\ C_0 = IV
+$$
+
+We are given $M_1$, and the whole encrypted message $C$.
+
+The first goal is to find the key K.
+
+\vspace{-2em}
+\begin{alignat*}{2}
+    &C_i = K \xor (M_i \xor C_{i-1})&\iff K = M_i \xor C_{i-1} \xor C_i\\
+\end{alignat*}
+\vspace{-2em}
+
+Applied to our case, we get :
+$$
+    K = M_1 \xor IV \xor C_1
+$$
+
+Once we found K, we only have to iterate over all encrypted block, and decipher it with the key K, since we know :
+
+\vspace{-2em}
+\begin{alignat*}{2}
+    &C_i = K \xor (M_i \xor C_{i-1})&\iff M_i = C_i \xor K \xor C_{i-1} \\
+\end{alignat*}
+\vspace{-2em}
+
+We can then reconstruct the complete plain-text message.
+
+\textbf{\large
+\begin{center}
+    Recovered message: 199809077237\\
+    Do or do not. There is not try. - Master Yoda000
+\end{center}}
+
 
 \newpage
 \section{Attacking RSA}
