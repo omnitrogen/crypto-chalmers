@@ -11,6 +11,7 @@
 \usepackage{xcolor}
 \usepackage{caption}
 \usepackage{amssymb}
+\usepackage{listings}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -19,13 +20,88 @@
 
 \captionsetup[subfigure]{labelformat=empty}
 
+\setcounter{section}{-1}
+
 \rhead{Félix Defrance - Alexis Laude}
-\lhead{Cryptography Course (TDA352) Report}
+\lhead{Cryptography Course (TDA352)}
 
 \begin{document}
 
-\section* {Programming Assignement}
+\section* {\underline{Programming Assignement Report}}
 
-\subsection*{ex0}
+\section*{Prelude}
+
+The personnummer used to generate our assignment is : \textbf{{\large 199809077237}}.
+
+All the programs are written in Java, and we provide Makefile(s) in order to run the code. Read all the README(s) for each exercices to get additionnal information on how to use the Makefile, but it should be pretty straightforward.
+
+\section{A Math Library for Cryptography}
+
+\newpage
+\section{Special Soundness of Fiat-Shamir sigma-protocol}
+
+\newpage
+\section{Decrypting CBC with simple XOR}
+
+\newpage
+\section{Attacking RSA}
+
+\newpage
+\section{Attacking ElGamal}
+
+In this exercice, we are given :
+\begin{itemize}
+    \item \textbf{p} : the group size
+    \item \textbf{g} : the generator of the group
+    \item \textbf{y} : the public key of the receiver
+    \item \textbf{time} : the time at which the message was encrypted (and the weak technique used to choose the "randomness")
+    \item \textbf{(c1, c2)} : the ElGamal encryption of the message
+\end{itemize}
+
+\vspace{1em}
+
+The first goal is to find the random number r used for the encryption.
+
+We know that $c_1 = g^{r}$, and we are given $g$, $c_1$ and the technique to find r.
+
+The pseudo code for the 'pseudo random number generator' is the following :
+
+{\small
+\begin{verbatim}
+integer createRandomNumber:
+    return YEAR*(10^10)+month*(10^8)+days*(10^6)+hours*(10^4)+minute*(10^2)+sec+millisecs;
+\end{verbatim}}
+
+We only miss the $millisecs$ value.
+
+We can then loop over all the possible value of $milliseconds$ and check at each iteration if $c_1 = g^{r}$.
+
+When the equality above is true, it means that we have found the right r.
+
+\vspace{1em}
+
+Now the last goal is to find the message m.
+
+From ElGamal encryption protocol, we know that $c_2 = m · y^{r}$.
+
+We are given $c_2$, $y$ and we just found $r$.
+
+\vspace{-2em}
+\begin{alignat*}{2}
+    &c_2 \equiv my^{r} (\textrm{mod}\ p)&\iff&m \equiv c_{2}(y^{-1})^{r} (\textrm{mod}\ p)\\
+\end{alignat*}
+
+\vspace{-2em}
+We can get the value of m by solving the above equation.
+
+After decryption, we get the following message :
+
+\textbf{\large
+\begin{center}
+    Decoded text: Crytanalysis doesn't break cryptosystems. Bruce Schneier breaks cryptosystems.
+\end{center}}
+
+\center
+\includegraphics[scale=.5]{bruce-schneier}
 
 \end{document}
