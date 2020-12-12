@@ -117,11 +117,11 @@ The same nonce $r$ has been used twice for different challenge values : $c = 0$ 
 
 We know that during the Fiat-Shamir protocol, when the Verifier sends a challenge $c \in \{0, 1\}$, the Prover needs to send her back the value $s = r x^c (\textrm{mod}\ n)$, where $x$ is the secret key.
 
-For the first challenge $c = 0$, he Prover will sends back the value $s = r x^0 = r$.
+For the first challenge $c = 0$, the Prover will sends back the value $s = r x^0 = r$.
 
 Thus, we know the value of $r$, it is $s$.
 
-For the second challenge $c = 1$, he Prover will sends back the value $s = r x^1 = r x$.
+For the second challenge $c = 1$, the Prover will sends back the value $s = r x^1 = r x$.
 
 We know the value of $s$ and $r$, we can then find the value $x = s r^{-1} (\textrm{mod}\ n)$.
 
@@ -190,20 +190,22 @@ Knowing how the RSA protocol works, we have the following encryptions :
 $$
 \left\{
     \begin{array}{lll}
-        c_1 \equiv m^{e} (\textrm{mod}\ N_1)\\
-        c_2 \equiv m^{e} (\textrm{mod}\ N_2)\\
-        c_3 \equiv m^{e} (\textrm{mod}\ N_3)
+        X \equiv C_1 (\textrm{mod}\ N_1)\\
+        X \equiv C_2 (\textrm{mod}\ N_2)\\
+        X \equiv C_3 (\textrm{mod}\ N_3)
     \end{array}
 \right.
 $$
 
-With the Chinese Remainder Theoremn we can find $c$ such that the solutions to the system above are all number congruent to $c$ modulo $N_1 N_2 N_3$.
+Where: $X = m^{e}$.
 
-Having found c, we know that : 
+With the Chinese Remainder Theoremn we can find $X$ such that the solutions to the system above are all number congruent to $X$ modulo $N_1 N_2 N_3$.
+
+Having found $X$, we know that : 
 
 \vspace{-2em}
 \begin{alignat*}{2}
-    &c \equiv m^{e} (\textrm{mod}\ N_1 N_2 N_3)&\iff&m \equiv \sqrt[3]{c\ (\textrm{mod}\ N_1 N_2 N_3)}\\
+    &X \equiv m^{e} (\textrm{mod}\ N_1 N_2 N_3)&\iff&m \equiv \sqrt[3]{X\ (\textrm{mod}\ N_1 N_2 N_3)}\\
 \end{alignat*}
 
 \vspace{-2em}
